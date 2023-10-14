@@ -4,11 +4,19 @@
     box-sizing: border-box;
 }
 
+.note-title{
+    text-align: center;
+    font-family: 'Source Serif 4', serif;
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
 header{
     text-align: center;
    
     min-height: 800px;
-    background-color: rgb(129, 216, 234);
+    background-color: rgba(129, 216, 234, 0.75); /* Change the alpha value (0.7 in this example) */
+
     width: 500px;
     padding: 100px 60px;
     margin: 0;
@@ -105,13 +113,17 @@ body{
 }
 
 .note p{
-    max-width: 100%;
-    font-family:  Tahoma, sans-serif;
-    white-space: pre-wrap;
+  max-width: 100%;
+  white-space: pre-wrap;
   word-wrap: break-word;
   margin-bottom: 20px;
-  font-family: 'M PLUS Rounded 1c', sans-serif;
-  font-weight: bold;
+  
+}
+
+.note-content{
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    
+  
 }
 
 .note button{

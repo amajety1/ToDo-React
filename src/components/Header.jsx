@@ -1,39 +1,90 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Note from './Note'
+import axios from "axios";
+
+
 
 function Header() {
 
-  var [noteText, setNoteText] = useState({title:'', content:''});
+  var [noteText, setNoteText] = useState({title:'', content:'', id:''});
   var [notes, setNotes] = useState([])
+  var [text, setText] = useState([])
+  var [log, setLog] = useState('')
+  var [isExpanded, setExpanded] = useState(false)
+  
+  function expand(){
+    setExpanded(true);
+  }
+
+  useEffect(() => {
+    try {
+      console.log('hi')
+    } catch (error) {
+      setLog(error.message)
+    }
+    
+    axios
+       .get('http://localhost:4000/notes')
+       .then((response) => {
+          let sentList = response.data
+          setText(sentList);
+          setNotes(sentList);
+       })
+       .catch((err) => {
+          console.log(err);
+          setLog(err.message);
+       });
+ }, []);
+
+    
 
   function onDelete(idToRemove){
-    setNotes(prevNotes => {
-      return prevNotes.filter((noteItem, index) => {
-        return index !== idToRemove;
-      });
+
+    axios
+    .post('http://localhost:4000/deleteNote', {
+      idToRemove:idToRemove
+    })
+    .then((response) => {
+      setNotes(response.data);
+      setNoteText({title:'', content:'', id:''})
     });
+
+    // setNotes(prevNotes => {
+    //   return prevNotes.filter((noteItem, index) => {
+    //     return index !== idToRemove;
+    //   });
+    // });
   }
 
-  function submitted(event){
-      event.preventDefault(); // Prevent form submission and page refresh
-
-      
-      setNotes(prevNotes=>{
-          return([...prevNotes, noteText ])
+  function createPost(event) {
+    event.preventDefault(); // Prevent form submission and page refresh
+    axios
+      .post('http://localhost:4000/newNote', {
+        title: noteText.title,
+        content: noteText.content,
+        id: ''
       })
-      setNoteText({title:'', content:''})
+      .then((response) => {
+        setNotes(response.data);
+        setNoteText({title:'', content:'', id:''})
+      });
+
+    //   setNotes(prevNotes=>{
+    //     return([...prevNotes, noteText ])
+    // })
+    // setNoteText({title:'', content:'', id:''})
   }
+
 
   function changeDetected(event){
       const {name, value} = event.target;
 
       setNoteText(prevNote=>{
           if(name==='title'){
-              return({title:value,content:prevNote.content})
+              return({title:value,content:prevNote.content, id:prevNote.id})
           }else{
-              return({title:prevNote.title,content:value})
+              return({title:prevNote.title,content:value,id:prevNote.id})
           }
       })
 
@@ -46,13 +97,17 @@ function Header() {
         <div class='text-container'>
             <h1>To-Do Tracker with React Magic</h1>
             <p>Let these meticulously designed note layouts be the vessel for the treasures hidden within your soul.</p>
+            
+            
+            
         </div>
         
    
-      <form onSubmit={submitted}>
-     
-        <input onChange={changeDetected} name="title" placeholder="Title" value={noteText.title} />
-        <textarea onChange={changeDetected} name="content" placeholder="Take a note..." value={noteText.content}  />
+      <form onSubmit={createPost}>
+
+        {isExpanded&&( <input onChange={changeDetected} name="title" placeholder="Title" value={noteText.title} />)}
+       
+        <textarea onClick={expand} onChange={changeDetected} name="content" placeholder="Take a note..." value={noteText.content} rows={isExpanded ? 3 : 0}  />
         <button><AddCircleIcon/></button>
      </form>
    
@@ -65,9 +120,10 @@ function Header() {
     <Note
       key={index} // You should use a unique key for each Note component
       title={note.title}
-      id={index} // Assuming that 'index' can be used as the ID
+      id={note.id} // Assuming that 'index' can be used as the ID
       content={note.content}
-      deleted={onDelete}
+      delete={onDelete}
+      
     />
   );
 })}
