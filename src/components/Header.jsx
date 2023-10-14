@@ -3,6 +3,8 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Note from './Note'
 import axios from "axios";
 
+const urlRoot = "https://api-for-react-list-project.onrender.com"
+
 
 
 function Header() {
@@ -25,7 +27,7 @@ function Header() {
     }
     
     axios
-       .get('http://localhost:4000/notes')
+       .get(`${urlRoot}/notes`)
        .then((response) => {
           let sentList = response.data
           setText(sentList);
@@ -42,7 +44,7 @@ function Header() {
   function onDelete(idToRemove){
 
     axios
-    .post('http://localhost:4000/deleteNote', {
+    .post(`${urlRoot}/deleteNote`, {
       idToRemove:idToRemove
     })
     .then((response) => {
@@ -60,7 +62,7 @@ function Header() {
   function createPost(event) {
     event.preventDefault(); // Prevent form submission and page refresh
     axios
-      .post('http://localhost:4000/newNote', {
+      .post(`${urlRoot}/newNote`, {
         title: noteText.title,
         content: noteText.content,
         id: ''
