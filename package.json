@@ -1,7 +1,6 @@
 {
   "name": "my-todo-app",
   "version": "0.1.0",
-  
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
@@ -17,9 +16,7 @@
     "logger": "^0.0.1",
     "mongoose": "^7.6.2",
     "react": "^18.0.0",
-    "react-console-logger": "^0.0.2",
     "react-dom": "^18.0.0",
-    "react-scripts": "^5.0.1",
     "uuid": "^9.0.1",
     "web-vitals": "^2.1.4"
   },
@@ -48,6 +45,6 @@
     ]
   },
   "devDependencies": {
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^3.0.1"
   }
 }
